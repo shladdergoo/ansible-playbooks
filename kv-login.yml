@@ -1,0 +1,26 @@
+---
+
+# Logs into Azure using a service principal and registers the KeyVault provider.
+# Requires:
+#  Principal id
+#  Principal password
+#  Subscription id
+#  Tennant id
+
+- name: login
+  command: az login --service-principal -u {{ az_principal }} --password {{ az_password }} --tenant {{ az_tenant }}
+  register: out
+- debug:
+    var: out.stdout_lines
+
+- name: set subscription
+  command: az account set --subscription {{ az_subscription }}
+  register: out
+- debug:
+    var: out.stdout_lines
+
+- name: register provider
+  command: az provider register -n Microsoft.KeyVault
+  register: out
+- debug:
+    var: out.stdout_lines
